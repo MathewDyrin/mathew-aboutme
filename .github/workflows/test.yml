@@ -1,0 +1,33 @@
+name: Test Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      greeting:
+        description: 'A greeting message'
+        required: false
+        default: 'Hello from GitHub Actions!'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Print greeting
+        run: echo "${{ github.event.inputs.greeting }}"
+
+      - name: Run about_me script
+        run: python about_me.py
+
+      - name: Show repo info
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Workflow completed successfully!"
